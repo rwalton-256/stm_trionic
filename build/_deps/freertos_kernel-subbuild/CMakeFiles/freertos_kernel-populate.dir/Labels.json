@@ -1,0 +1,46 @@
+{
+	"sources" : 
+	[
+		{
+			"file" : "/home/waltor/stm_ecu/build/_deps/freertos_kernel-subbuild/CMakeFiles/freertos_kernel-populate"
+		},
+		{
+			"file" : "/home/waltor/stm_ecu/build/_deps/freertos_kernel-subbuild/CMakeFiles/freertos_kernel-populate.rule"
+		},
+		{
+			"file" : "/home/waltor/stm_ecu/build/_deps/freertos_kernel-subbuild/CMakeFiles/freertos_kernel-populate-complete.rule"
+		},
+		{
+			"file" : "/home/waltor/stm_ecu/build/_deps/freertos_kernel-subbuild/freertos_kernel-populate-prefix/src/freertos_kernel-populate-stamp/freertos_kernel-populate-install.rule"
+		},
+		{
+			"file" : "/home/waltor/stm_ecu/build/_deps/freertos_kernel-subbuild/freertos_kernel-populate-prefix/src/freertos_kernel-populate-stamp/freertos_kernel-populate-mkdir.rule"
+		},
+		{
+			"file" : "/home/waltor/stm_ecu/build/_deps/freertos_kernel-subbuild/freertos_kernel-populate-prefix/src/freertos_kernel-populate-stamp/freertos_kernel-populate-download.rule"
+		},
+		{
+			"file" : "/home/waltor/stm_ecu/build/_deps/freertos_kernel-subbuild/freertos_kernel-populate-prefix/src/freertos_kernel-populate-stamp/freertos_kernel-populate-update.rule"
+		},
+		{
+			"file" : "/home/waltor/stm_ecu/build/_deps/freertos_kernel-subbuild/freertos_kernel-populate-prefix/src/freertos_kernel-populate-stamp/freertos_kernel-populate-patch.rule"
+		},
+		{
+			"file" : "/home/waltor/stm_ecu/build/_deps/freertos_kernel-subbuild/freertos_kernel-populate-prefix/src/freertos_kernel-populate-stamp/freertos_kernel-populate-configure.rule"
+		},
+		{
+			"file" : "/home/waltor/stm_ecu/build/_deps/freertos_kernel-subbuild/freertos_kernel-populate-prefix/src/freertos_kernel-populate-stamp/freertos_kernel-populate-build.rule"
+		},
+		{
+			"file" : "/home/waltor/stm_ecu/build/_deps/freertos_kernel-subbuild/freertos_kernel-populate-prefix/src/freertos_kernel-populate-stamp/freertos_kernel-populate-test.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : 
+		[
+			"freertos_kernel-populate"
+		],
+		"name" : "freertos_kernel-populate"
+	}
+}

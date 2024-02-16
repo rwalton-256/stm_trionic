@@ -1,0 +1,2 @@
+/usr/bin/ar qc libfreertos_plus_tcp_utilities.a  CMakeFiles/freertos_plus_tcp_utilities.dir/tcp_utilities/tcp_dump_packets.c.o CMakeFiles/freertos_plus_tcp_utilities.dir/tcp_utilities/tcp_mem_stats.c.o CMakeFiles/freertos_plus_tcp_utilities.dir/tcp_utilities/tcp_netstat.c.o
+/usr/bin/ranlib libfreertos_plus_tcp_utilities.a

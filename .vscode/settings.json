@@ -1,0 +1,72 @@
+{
+    "C_Cpp.default.includePath": [
+        "include",
+        "libs/cmsis_core/Core/Include",
+        "libs/cmsis_device_f4/Include",
+        "libs/FreeRTOS-Kernel/include",
+        "libs/FreeRTOS-Kernel/portable/GCC/ARM_CM4F",
+        "libs/include",
+        "libs/stm32f4xx_hal_driver/Inc",
+        "libs/FreeRTOS-Plus-TCP/source/include",
+        "libs/FreeRTOS-Plus-TCP/source/portable/NetworkInterface/STM32Fxx",
+        "libs/FreeRTOS-Plus-TCP/source/portable/Compiler/GCC",
+        "libs/FreeRTOS-Plus-TCP/source/portable/NetworkInterface/include",
+        "libs/SystemView/Config",
+        "libs/SystemView/SEGGER",
+        "libs/SystemView/Sample/FreeRTOSV10.4"
+    ],
+    "files.associations": {
+        "stm32f1xx_hal.h": "c",
+        "stm32f1xx_hal_conf.h": "c",
+        "task.h": "c",
+        "stm32f1xx_hal_def.h": "c",
+        "stm32f1xx.h": "c",
+        "lnh": "c",
+        "stdio.h": "c",
+        "_ansi.h": "c",
+        "bit": "cpp",
+        "*.tcc": "cpp",
+        "complex": "cpp",
+        "functional": "cpp",
+        "random": "cpp",
+        "limits": "cpp",
+        "stream_buffer.h": "c",
+        "semphr.h": "c",
+        "main": "c",
+        "projdefs.h": "c",
+        "portable.h": "c",
+        "i2cdev.h": "c",
+        "mpu6500.h": "c",
+        "freertos.h": "c",
+        "stm32f4xx_hal.h": "c",
+        "freertos_ip.h": "c",
+        "stm32f4xx_hal_conf.h": "c",
+        "networkbuffermanagement.h": "c",
+        "stm32fxx_hal_eth.h": "c",
+        "stm32f4xx_hal_eth.h": "c",
+        "ostream": "cpp"
+    },
+    "files.exclude": {
+        "**/.git": true,
+        "**/build" : true,
+        ".vscode/.cortex*" : true,
+    },
+    "C_Cpp.default.intelliSenseMode": "gcc-arm",
+    "C_Cpp.default.compilerPath": "arm-none-eabi-g++",
+    "C_Cpp.default.defines": [
+        "STM32F407xx",
+        "STM32F4xx"
+    ],
+    // The number of spaces a tab is equal to. This setting is overridden
+    // based on the file contents when `editor.detectIndentation` is true.
+    "editor.tabSize": 4,
+
+    // Insert spaces when pressing Tab. This setting is overriden
+    // based on the file contents when `editor.detectIndentation` is true.
+    "editor.insertSpaces": true,
+
+    // When opening a file, `editor.tabSize` and `editor.insertSpaces`
+    // will be detected based on the file contents. Set to false to keep
+    // the values you've explicitly set, above.
+    "editor.detectIndentation": false
+}

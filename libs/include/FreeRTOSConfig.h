@@ -131,5 +131,8 @@ header file. */
  */
 #define xPortSysTickHandler SysTick_Handler
 
+// Define trace utilities
+#include "SEGGER_SYSVIEW_FreeRTOS.h"
+
 #endif /* FREERTOS_CONFIG_H */
 

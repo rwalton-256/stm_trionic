@@ -1,0 +1,2 @@
+/usr/bin/ar qc libfreertos_plus_tcp_network_if_common.a  CMakeFiles/freertos_plus_tcp_network_if_common.dir/Common/phyHandling.c.o
+/usr/bin/ranlib libfreertos_plus_tcp_network_if_common.a

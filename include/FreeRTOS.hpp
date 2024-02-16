@@ -3,6 +3,11 @@
 #include <functional>
 
 #include <FreeRTOS.h>
+extern "C"
+{
+    #include <FreeRTOS_IP.h>
+}
+
 
 #include <semphr.h>
 #include <stream_buffer.h>

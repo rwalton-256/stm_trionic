@@ -13,3 +13,6 @@
 [submodule "libs/cmsis_core"]
 	path = libs/cmsis_core
 	url = https://github.com/STMicroelectronics/cmsis_core.git
+[submodule "libs/FreeRTOS-Plus-TCP"]
+	path = libs/FreeRTOS-Plus-TCP
+	url = git@github.com:FreeRTOS/FreeRTOS-Plus-TCP.git

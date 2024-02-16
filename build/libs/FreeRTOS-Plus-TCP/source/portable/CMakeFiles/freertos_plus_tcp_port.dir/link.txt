@@ -1,0 +1,2 @@
+/usr/bin/ar qc libfreertos_plus_tcp_port.a  CMakeFiles/freertos_plus_tcp_port.dir/BufferManagement/BufferAllocation_2.c.o
+/usr/bin/ranlib libfreertos_plus_tcp_port.a

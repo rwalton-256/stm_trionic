@@ -1,0 +1,2 @@
+/usr/bin/ar qc libsegger.a  CMakeFiles/segger.dir/SystemView/SEGGER/SEGGER_RTT.c.o CMakeFiles/segger.dir/SystemView/SEGGER/SEGGER_SYSVIEW.c.o CMakeFiles/segger.dir/SystemView/Sample/FreeRTOSV10.4/SEGGER_SYSVIEW_FreeRTOS.c.o CMakeFiles/segger.dir/SystemView/Sample/FreeRTOSV10.4/Config/Cortex-M/SEGGER_SYSVIEW_Config_FreeRTOS.c.o
+/usr/bin/ranlib libsegger.a

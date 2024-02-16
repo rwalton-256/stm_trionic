@@ -1,0 +1,2 @@
+/usr/bin/ar qc libfreertos_plus_tcp_network_if.a  CMakeFiles/freertos_plus_tcp_network_if.dir/NetworkInterface.c.o
+/usr/bin/ranlib libfreertos_plus_tcp_network_if.a
