@@ -48,7 +48,7 @@
     },
     "files.exclude": {
         "**/.git": true,
-        "**/build" : true,
+//        "**/build" : true,
         ".vscode/.cortex*" : true,
     },
     "C_Cpp.default.intelliSenseMode": "gcc-arm",

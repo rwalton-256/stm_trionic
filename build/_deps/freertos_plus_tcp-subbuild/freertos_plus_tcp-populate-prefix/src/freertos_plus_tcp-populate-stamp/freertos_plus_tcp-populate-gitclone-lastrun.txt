@@ -1,3 +1,0 @@
-repository='https://github.com/FreeRTOS/FreeRTOS-Plus-TCP.git'
-module=''
-tag='origin'
