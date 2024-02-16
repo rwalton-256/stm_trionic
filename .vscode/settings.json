@@ -44,7 +44,8 @@
         "networkbuffermanagement.h": "c",
         "stm32fxx_hal_eth.h": "c",
         "stm32f4xx_hal_eth.h": "c",
-        "ostream": "cpp"
+        "ostream": "cpp",
+        "chrono": "cpp"
     },
     "files.exclude": {
         "**/.git": true,

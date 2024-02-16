@@ -1,5 +1,7 @@
 #pragma once
 
+#include <chrono>
+#include <cstdint>
 #include <functional>
 
 #include <FreeRTOS.h>
@@ -7,7 +9,6 @@ extern "C"
 {
     #include <FreeRTOS_IP.h>
 }
-
 
 #include <semphr.h>
 #include <stream_buffer.h>
@@ -152,3 +153,16 @@ namespace FreeRTOS
 
 }
 
+struct clock
+{
+    using rep        = TickType_t;
+    using period     = std::milli;
+    using duration   = std::chrono::duration<rep, period>;
+    using time_point = std::chrono::time_point<clock>;
+    static constexpr bool is_steady = true;
+
+    static time_point now() noexcept
+    {
+        return time_point{ duration{ xTaskGetTickCount() } };
+    }
+};

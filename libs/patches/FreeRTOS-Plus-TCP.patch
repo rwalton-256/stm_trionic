@@ -1,0 +1,15 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index a936579..ff4a04f 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -196,8 +196,8 @@ add_compile_options(
+ 
+     $<$<COMPILE_LANG_AND_ID:C,Clang,GNU>:-Wall>
+     $<$<COMPILE_LANG_AND_ID:C,Clang,GNU>:-Wextra>
+-    $<$<COMPILE_LANG_AND_ID:C,Clang,GNU>:-Werror>
+-    $<$<COMPILE_LANG_AND_ID:C,Clang>:-Wpedantic>
++#    $<$<COMPILE_LANG_AND_ID:C,Clang,GNU>:-Werror>
++#    $<$<COMPILE_LANG_AND_ID:C,Clang>:-Wpedantic>
+     $<$<COMPILE_LANG_AND_ID:C,Clang,GNU>:-Wconversion>
+     $<$<COMPILE_LANG_AND_ID:C,Clang,GNU>:-Wunused-variable>
+     $<$<COMPILE_LANG_AND_ID:C,Clang>:-Weverything>

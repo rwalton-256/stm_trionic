@@ -5,16 +5,16 @@
             "label": "cmake",
             "type": "shell",
             "options": {
-                "cwd": "${workspaceRoot}/build"
+                "cwd": "${workspaceRoot}"
             },
-            "command": "cmake ${workspaceRoot}"
+            "command": "cmake -Bbuild"
         },
         {
             "label": "make",
             "type": "shell",
-            "command": "make -j 12",
+            "command": "cmake --build build -j 20",
             "options": {
-                "cwd": "${workspaceRoot}/build"
+                "cwd": "${workspaceRoot}"
             },
             "dependsOn":["cmake"]
         },

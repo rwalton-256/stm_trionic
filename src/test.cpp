@@ -7,7 +7,7 @@ extern "C"
 #include <iostream>
 #include <chrono>
 
-#if 0
+#if 1
 char buf[1400] = "Hello World!\n";
 
 static FreeRTOS::task<
@@ -28,7 +28,7 @@ static FreeRTOS::task<
             //FreeRTOS_sendto( xSocket, "Hello World!\n\r", strlen( "Hello World!\n\r" ), NULL, &xDestinationAddress, sizeof( xDestinationAddress ) );
             //printf(";laksjdf");
             HAL_GPIO_TogglePin( GPIOC, GPIO_PIN_13 );
-            vLoggingPrintf("HELLO WORLD!\n\r");
+            vLoggingPrintf("HELLO WORLD!%lu\n\r",std::chrono::high_resolution_clock::now().time_since_epoch().count());
             vTaskDelay( 1000 );
             //std::cout << "Hello World!" << ( std::chrono::high_resolution_clock::now() - std::chrono::high_resolution_clock::now() ).count() << std::endl;
         }

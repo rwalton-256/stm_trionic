@@ -115,7 +115,7 @@ number generation is performed via this macro to allow applications to use their
 own random number generation method.  For example, it might be possible to
 generate a random number by sampling noise on an analogue input. */
 extern UBaseType_t uxRand();
-#define ipconfigRAND32()	uxRand()
+//#define ipconfigRAND32()	uxRand()
 
 /* If ipconfigUSE_NETWORK_EVENT_HOOK is set to 1 then FreeRTOS+TCP will call the
 network event hook at the appropriate times.  If ipconfigUSE_NETWORK_EVENT_HOOK
@@ -305,5 +305,8 @@ disconnecting stage will timeout after a period of non-activity. */
 #define portINLINE __inline
 
 #define ipconfigUSE_RMII 1
+
+#define ipconfigDRIVER_INCLUDED_TX_IP_CHECKSUM 1
+#define ipconfigDRIVER_INCLUDED_RX_IP_CHECKSUM 1
 
 #endif /* FREERTOS_IP_CONFIG_H */

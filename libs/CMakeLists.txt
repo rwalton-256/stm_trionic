@@ -45,12 +45,6 @@ target_link_options(
 
 include(FetchContent)
 
-#FetchContent_Declare(
-#    freertos_kernel
-#    GIT_REPOSITORY https://github.com/FreeRTOS/FreeRTOS-Kernel.git
-#    GIT_TAG        main #Note: Best practice to use specific git-hash or tagged version
-#)
-
 add_library(freertos_config INTERFACE)
 
 target_include_directories(
@@ -72,47 +66,20 @@ target_compile_definitions(
 set( FREERTOS_HEAP ${CMAKE_CURRENT_SOURCE_DIR}/sys_heap.c CACHE STRING "" FORCE)
 set( FREERTOS_PORT "GCC_ARM_CM4F" CACHE STRING "" FORCE)
 
-#FetchContent_MakeAvailable(
-#    freertos_kernel
-#)
-
-#add_subdirectory(
-#    FreeRTOS-Kernel
-#)
-
 FetchContent_Declare(
     freertos_plus_tcp
     GIT_REPOSITORY https://github.com/FreeRTOS/FreeRTOS-Plus-TCP.git
-    GIT_TAG        main #Note: Best practice to use specific git-hash or tagged version
-    GIT_SUBMODULES "" # Don't grab any submodules since not latest
+    GIT_TAG        "V4.0.0"
+    GIT_SUBMODULES ""
+    PATCH_COMMAND  git apply ${CMAKE_CURRENT_SOURCE_DIR}/patches/FreeRTOS-Plus-TCP.patch
+    UPDATE_DISCONNECTED 1
 )
 
 set( FREERTOS_PLUS_TCP_NETWORK_IF "STM32FXX" CACHE STRING "" FORCE )
 
-
-
-add_subdirectory(
-    FreeRTOS-Plus-TCP
+FetchContent_MakeAvailable(
+    freertos_plus_tcp
 )
-
-#FetchContent_MakeAvailable(
-#    freertos_plus_tcp
-#)
-
-#
-# Removes the specified compile flag from the specified target.
-#   _target     - The target to remove the compile flag from
-#   _flag       - The compile flag to remove
-#
-# Pre: apply_global_cxx_flags_to_all_targets() must be invoked.
-#
-macro(remove_flag_from_target _target _flag)
-    get_target_property(_target_cxx_flags ${_target} COMPILE_OPTIONS)
-    if(_target_cxx_flags)
-        list(REMOVE_ITEM _target_cxx_flags ${_flag})
-        set_target_properties(${_target} PROPERTIES COMPILE_OPTIONS "${_target_cxx_flags}")
-    endif()
-endmacro()
 
 target_compile_definitions(
     freertos_plus_tcp_network_if
