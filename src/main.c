@@ -6,9 +6,9 @@
 int i=0;
 
 static uint8_t ucMACAddress[ 6 ] = { 0x00, 0x11, 0x22, 0x33, 0x44, 0x55 };
-static const uint8_t ucIPAddress[ 4 ] = { 1, 1, 1, 2 };
-static const uint8_t ucNetMask[ 4 ] = { 255, 0, 0, 0 };
-static const uint8_t ucGatewayAddress[ 4 ] = { 1, 1, 1, 1 };
+static const uint8_t ucIPAddress[ 4 ]      = { 192, 168, 7, 2 };
+static const uint8_t ucNetMask[ 4 ]        = { 255, 255, 255, 0 };
+static const uint8_t ucGatewayAddress[ 4 ] = { 192, 168, 7, 1 };
 static const uint8_t ucDNSServerAddress[ 4 ] = { 208, 67, 222, 222 };
 
 static NetworkInterface_t xInterfaces[ 1 ];

@@ -52,6 +52,7 @@ target_link_libraries(
     freertos_plus_tcp
     stm32f4xx_hal
     segger
+    fatfs
 )
 
 target_include_directories(
