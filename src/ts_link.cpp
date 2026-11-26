@@ -13,6 +13,8 @@
 #include "outputs.hpp"
 #include "sdcard.hpp"
 #include "power.hpp"
+#include "settings.hpp"
+#include "fuel.hpp"
 
 namespace
 {
@@ -27,8 +29,10 @@ namespace
         RC_TIMEOUT = 0x80, RC_CRC_ERR = 0x82, RC_UNKNOWN = 0x83, RC_RANGE_ERR = 0x84,
     };
 
-    uint8_t rx[BLOCKING + 16];
-    uint8_t tx[BLOCKING + 16];
+    // Sized for the larger table reads (tableBlockingFactor), not just BLOCKING: TunerStudio
+    // reads table pages in TABLE_BLOCKING-byte chunks.
+    uint8_t rx[TABLE_BLOCKING + 16];
+    uint8_t tx[TABLE_BLOCKING + 16];
 
     // Standard CRC-32 (poly 0xEDB88320, init/xorout 0xFFFFFFFF), same as FastCRC32::crc32
     uint32_t crc32(const uint8_t* p, size_t n)
@@ -86,6 +90,8 @@ namespace
     uint8_t* page_ptr(uint8_t page, uint16_t& size)
     {
         if (page == 1) { size = sizeof(tune_page1); return reinterpret_cast<uint8_t*>(&tune_page1); }
+        if (page == 2) { size = sizeof(fuel::tables); return reinterpret_cast<uint8_t*>(&fuel::tables); }
+        if (page == 3) { size = sizeof(fuel::status_page); return reinterpret_cast<uint8_t*>(&fuel::status_page); }
         size = 0; return nullptr;
     }
 
@@ -116,7 +122,7 @@ namespace
         o.stopped         = crank::status.stopped;
         o.advance         = tune_page1.advance;
         o.out_flags       = uint8_t((tune_page1.outputs_enable & 3) | (outputs::status.rev_limited ? 4 : 0)
-                                  | (crank::status.simulating ? 8 : 0));
+                                  | (crank::status.simulating ? 8 : 0)) | (fuel::status.dfco ? 0x10 : 0);
         o.pw_us           = tune_page1.inj_pw_us;
         o.sparks          = outputs::status.sparks;
         o.injections      = outputs::status.injections;
@@ -132,6 +138,9 @@ namespace
         o.power_state     = power::status.state;
         o.power_flags     = power::status.flags;
         o.sleep_in_ds     = power::status.sleep_in_ds;
+        o.settings_source = settings::status.source;
+        o.settings_dirty  = settings::status.dirty ? 1 : 0;
+        o.settings_saves  = settings::status.saves;
     }
 
     bool handle_sig(Socket_t s);
@@ -187,7 +196,7 @@ namespace
             if (len < 7) return send_rc(s, RC_RANGE_ERR);
             uint16_t size; uint8_t* pg = page_ptr(rx[2], size);
             uint16_t off = u16(&rx[3]), n = u16(&rx[5]);
-            if (!pg || off + n > size || n > BLOCKING) return send_rc(s, RC_RANGE_ERR);
+            if (!pg || off + n > size || n > TABLE_BLOCKING) return send_rc(s, RC_RANGE_ERR);
             tx[0] = RC_OK;
             memcpy(&tx[1], pg + off, n);
             return send_frame(s, tx, n + 1);
@@ -209,7 +218,8 @@ namespace
             const uint8_t v[] = { RC_OK, uint8_t(c >> 24), uint8_t(c >> 16), uint8_t(c >> 8), uint8_t(c) };
             return send_frame(s, v, sizeof(v));
         }
-        case 'b': case 'B':                                   // burn: TODO persist to flash
+        case 'b': case 'B':                                   // burn: saved to SD by the SD task
+            settings::request_save();
             return send_rc(s, RC_BURN_OK);
         default:
             return send_rc(s, RC_UNKNOWN);
@@ -271,6 +281,11 @@ TunePage1 tune_page1 =
     0,              // outputs disabled until enabled from TunerStudio
     0,              // crank simulator off
     0,              // bench ignition override off
+    0,              // fuel mode: fixed pulse width until switched to speed-density
+    0,              // DFCO disabled by default (opt-in; the driving sim enables it)
+    3,              // DFCO closed-throttle threshold, %
+    1800,           // DFCO cut rpm
+    1300,           // DFCO resume rpm
     {}
 };
 

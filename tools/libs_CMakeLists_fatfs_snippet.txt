@@ -1,0 +1,29 @@
+
+# ---- FatFs (ChaN R0.15) for the microSD card ---------------------------------------------
+FetchContent_Declare(
+    fatfs
+    URL http://elm-chan.org/fsw/ff/arc/ff15.zip
+    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
+)
+FetchContent_MakeAvailable( fatfs )          # plain source archive: just downloads and unpacks
+
+set( FATFS_DIR ${fatfs_SOURCE_DIR}/source )
+
+# Adjust the stock ffconf.h in place: long file names, US code page (the default 932 is Japanese).
+file( READ ${FATFS_DIR}/ffconf.h FFCONF )
+string( REGEX REPLACE "#define[ \t]+FF_USE_LFN[ \t]+[0-9]+"   "#define FF_USE_LFN\t\t1"   FFCONF "${FFCONF}" )
+string( REGEX REPLACE "#define[ \t]+FF_CODE_PAGE[ \t]+[0-9]+" "#define FF_CODE_PAGE\t437" FFCONF "${FFCONF}" )
+file( WRITE ${FATFS_DIR}/ffconf.h "${FFCONF}" )
+
+add_library(
+    fatfs
+    STATIC
+    ${FATFS_DIR}/ff.c
+    ${FATFS_DIR}/ffunicode.c
+)
+
+target_include_directories(
+    fatfs
+    PUBLIC
+    ${FATFS_DIR}
+)

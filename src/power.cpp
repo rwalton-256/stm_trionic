@@ -26,10 +26,12 @@ namespace
 
     constexpr uint32_t TICK_MS        = 10;
     constexpr uint32_t IGN_ON_MS      = 30;     // debounce: +15 must be high this long
-    constexpr uint32_t IGN_OFF_MS     = 1000;   // ...and low this long (rides through cranking dips)
+    constexpr uint32_t IGN_OFF_MS     = 100;    // ...and low this long (noise filter; wiring is solid)
     constexpr uint32_t PRIME_MS       = 2000;   // fuel pump prime at key-on
     constexpr uint32_t RUNON_MS       = 5000;   // ignition off this long before sleeping
     constexpr uint32_t BOOT_GRACE_MS  = 30000;  // stay awake after power-up so TunerStudio can connect
+    constexpr uint32_t CRANK_RPM_MAX  = 400;    // below this the engine is cranking, not running
+    constexpr uint32_t CRANK_HOLD_MS  = 3000;   // longest a +15 dip is ignored while cranking
 
     void relay(uint16_t pin, bool on) { HAL_GPIO_WritePin(GPIOG, pin, on ? GPIO_PIN_SET : GPIO_PIN_RESET); }
 
@@ -137,11 +139,14 @@ static FreeRTOS::task<
             bool bench   = tune_page1.bench_ign != 0;
             bool turning = crank::status.synced || crank::status.rpm != 0;
 
-            // Debounce +15. Never call it "off" while the engine is turning (cranking voltage dip).
+            // Debounce +15. While cranking (slow, starter engaged) the battery sags and +15 can
+            // read low, so ride through that for a while. A *running* engine gets no exemption:
+            // key off must always stop it.
             if (raw) { on_ms += TICK_MS; off_ms = 0; } else { off_ms += TICK_MS; on_ms = 0; }
-            bool was_on = ign;
-            if (on_ms  >= IGN_ON_MS)                ign = true;
-            if (off_ms >= IGN_OFF_MS && !turning)   ign = false;
+            bool was_on   = ign;
+            bool cranking = turning && crank::status.rpm < CRANK_RPM_MAX;
+            if (on_ms >= IGN_ON_MS) ign = true;
+            if (off_ms >= IGN_OFF_MS && !(cranking && off_ms < CRANK_HOLD_MS)) ign = false;
             bool ign_eff = ign || bench;
 
             uint8_t flags = (raw ? F_IGN_INPUT : 0) | (bench ? F_BENCH_IGN : 0);

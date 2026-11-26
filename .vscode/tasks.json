@@ -2,33 +2,58 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "cmake",
-            "type": "shell",
-            "options": {
-                "cwd": "${workspaceRoot}"
-            },
-            "command": "cmake -Bbuild"
-        },
-        {
-            "label": "make",
-            "type": "shell",
-            "command": "cmake --build build -j 20",
-            "options": {
-                "cwd": "${workspaceRoot}"
-            },
-            "dependsOn":["cmake"]
-        },
-        {
             "label": "build",
             "type": "shell",
-            "options": {
-                "cwd": "${workspaceRoot}/build"
-            },
+            "command": "make build",
+            "group": "build",
+            "problemMatcher": [
+                "$gcc"
+            ]
+        },
+        {
+            "label": "build and flash (Ethernet)",
+            "type": "shell",
+            "command": "make flash",
             "group": {
                 "kind": "build",
                 "isDefault": true
             },
-            "dependsOn": ["make"]
+            "problemMatcher": [
+                "$gcc"
+            ]
+        },
+        {
+            "label": "flash (JTAG)",
+            "type": "shell",
+            "command": "make flash-jtag",
+            "problemMatcher": [
+                "$gcc"
+            ]
+        },
+        {
+            "label": "TunerStudio bridge",
+            "type": "shell",
+            "command": "make bridge",
+            "isBackground": true,
+            "problemMatcher": []
+        },
+        {
+            "label": "ECU status",
+            "type": "shell",
+            "command": "make status",
+            "problemMatcher": []
+        },
+        {
+            "label": "simulation tests",
+            "type": "shell",
+            "command": "make sim",
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            },
+            "problemMatcher": [
+                "$gcc"
+            ]
         }
     ]
 }

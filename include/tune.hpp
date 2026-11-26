@@ -26,7 +26,12 @@ struct __attribute__((packed)) TunePage1
     uint8_t  outputs_enable;    // 33: bit0 injectors, bit1 spark (0 = nothing fires)
     uint16_t sim_rpm;           // 34: internal crank simulator, 0 = off (use the real sensor)
     uint8_t  bench_ign;         // 36: bench only: act as if +15 were on (resets at power-up)
-    uint8_t  reserved[27];      // 37..63
+    uint8_t  fuel_mode;         // 37: 0 = fixed inj_pw_us, 1 = speed-density (fuel.cpp)
+    uint8_t  dfco_enable;       // 38: 1 = cut injectors on overrun (closed throttle, high rpm)
+    uint8_t  dfco_tps_pct;      // 39: closed-throttle threshold, %
+    uint16_t dfco_cut_rpm;      // 40: cut fuel above this rpm
+    uint16_t dfco_resume_rpm;   // 42: restore fuel below this rpm (hysteresis; < cut)
+    uint8_t  reserved[20];      // 44..63
 };
 static_assert(sizeof(TunePage1) == 64, "page 1 must be 64 bytes");
 
@@ -54,7 +59,7 @@ struct __attribute__((packed)) OutputChannels
     uint16_t overcount;        // 28
     uint16_t stopped;          // 30
     int8_t   advance;          // 32: deg BTDC
-    uint8_t  out_flags;        // 33: bit0 fuel, bit1 spark, bit2 rev limit, bit3 simulator
+    uint8_t  out_flags;        // 33: bit0 fuel, bit1 spark, bit2 rev limit, bit3 simulator, bit4 dfco
     uint16_t pw_us;            // 34: injector pulse width
     uint16_t sparks;           // 36
     uint16_t injections;       // 38
@@ -70,7 +75,9 @@ struct __attribute__((packed)) OutputChannels
     uint8_t  power_state;      // 56: 0 boot, 1 ignition on, 2 ignition off, 3 sleeping
     uint8_t  power_flags;      // 57: see power::Flags
     uint16_t sleep_in_ds;      // 58: tenths of a second until sleep
-    uint8_t  reserved3[4];     // 60..63
+    uint8_t  settings_source;  // 60: 0 defaults, 1 tune_a.bin, 2 tune_b.bin
+    uint8_t  settings_dirty;   // 61: unsaved changes
+    uint16_t settings_saves;   // 62: saves since boot
 };
 static_assert(sizeof(OutputChannels) == 64, "ochBlockSize must be 64");
 

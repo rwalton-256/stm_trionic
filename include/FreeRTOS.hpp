@@ -145,10 +145,12 @@ namespace FreeRTOS
                 )
             )
         {}
+#ifndef STM_TRIONIC_SIM   // on the host this would run at process exit, on the wrong thread
         ~task<stack_size,priority>()
         {
             vTaskDelete( NULL );
         }
+#endif
     };
 
 }

@@ -1,2 +1,7 @@
 build
 
+build-sim
+.venv-sim
+sim-deps.zip
+sim-deps/
+sim/_preview.png

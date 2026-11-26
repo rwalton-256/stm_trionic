@@ -17,6 +17,9 @@
 #include "ff.h"
 #include "diskio.h"
 #include "sdcard.hpp"
+#include "settings.hpp"
+#include "crank.hpp"
+#include "power.hpp"
 
 namespace sdcard
 {
@@ -79,6 +82,10 @@ namespace
 
     alignas(4) uint8_t bounce[512];   // HAL polling is happiest with word-aligned buffers
 }
+
+// Settings snapshot/apply must not interleave with the fuel task updating VE.
+extern "C" void settings_lock()   { taskENTER_CRITICAL(); }
+extern "C" void settings_unlock() { taskEXIT_CRITICAL(); }
 
 // ---- FatFs disk I/O layer (one physical drive: 0) ----------------------------------------
 extern "C"
@@ -173,6 +180,29 @@ namespace
         return c;
     }
 
+    // ---- settings files through FatFs ----
+    struct FatFsIo : settings::Io
+    {
+        int read(const char* name, uint8_t* buf, size_t max) override
+        {
+            if (f_open(&file, name, FA_READ) != FR_OK) return -1;
+            UINT n = 0;
+            FRESULT r = f_read(&file, buf, UINT(max), &n);
+            f_close(&file);
+            return r == FR_OK ? int(n) : -1;
+        }
+        bool write(const char* name, const uint8_t* buf, size_t len) override
+        {
+            if (f_open(&file, name, FA_CREATE_ALWAYS | FA_WRITE) != FR_OK) return false;
+            UINT n = 0;
+            FRESULT r = f_write(&file, buf, UINT(len), &n);
+            FRESULT s = f_sync(&file);                      // on the card before we report success
+            FRESULT c = f_close(&file);
+            return r == FR_OK && s == FR_OK && c == FR_OK && n == UINT(len);
+        }
+    };
+    FatFsIo io;
+
     void update_space()
     {
         DWORD free_clusters = 0;
@@ -194,6 +224,7 @@ static FreeRTOS::task<
     [](void*)
     {
         pins_init();
+        uint32_t tick = 0;
         for (;;)
         {
             if (sdcard::status.state != sdcard::READY)
@@ -217,13 +248,16 @@ static FreeRTOS::task<
             }
             else
             {
-                // Card present and mounted: check it's still there every few seconds.
-                if (HAL_SD_GetCardState(&hsd) != HAL_SD_CARD_TRANSFER)
+                settings::service(io, xTaskGetTickCount() * portTICK_PERIOD_MS,
+                                  power::status.state == power::IGN_ON, crank::status.rpm != 0);
+
+                // Card still there? (checked every 5 s)
+                if (++tick % 5 == 0 && HAL_SD_GetCardState(&hsd) != HAL_SD_CARD_TRANSFER)
                 {
                     card_ok = false;
                     sdcard::status.state = sdcard::NO_CARD;
                 }
-                vTaskDelay(pdMS_TO_TICKS(5000));
+                vTaskDelay(pdMS_TO_TICKS(1000));
             }
         }
     },

@@ -12,6 +12,7 @@
 #include "crank.hpp"
 #include "tune.hpp"
 #include "power.hpp"
+#include "fuel.hpp"
 
 namespace outputs
 {
@@ -149,6 +150,7 @@ namespace outputs
 
         TIM4->CR1 = TIM_CR1_CEN;
         TIM1->CR1 = TIM_CR1_CEN;
+        stop();                                          // start from a known state
     }
 
     void stop()
@@ -221,7 +223,8 @@ namespace outputs
             }
 
             // ---- fuel: both injectors of the pair, once per revolution ----
-            if (fuel && t.inj_pw_us >= 100)
+            uint32_t pw_cmd = t.fuel_mode == 1 ? fuel::pulse_us() : t.inj_pw_us;
+            if (fuel && pw_cmd >= 100)
             {
                 float d = forward(tooth_deg, float(p.tdc_deg) - float(t.inj_angle));
                 if (d < window)
@@ -230,7 +233,7 @@ namespace outputs
                     delay = delay > elapsed ? delay - elapsed : 0;
                     // Never longer than 85% of a revolution (or the 16-bit timer)
                     uint32_t rev_us = period * crank::TOOTH_POSITIONS;
-                    uint32_t w = t.inj_pw_us;
+                    uint32_t w = pw_cmd;
                     if (w > rev_us * 85 / 100) w = rev_us * 85 / 100;
                     if (w > 60000) w = 60000;
                     bool a = arm(inj[p.a], delay, uint16_t(w));
